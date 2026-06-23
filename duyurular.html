@@ -1,1 +1,459 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vice MTA Roleplay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- GENEL AYARLAR --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        body { background-color: #050505; color: white; overflow-x: hidden; opacity: 0; animation: fadeInPage 1s ease-in-out forwards; }
 
+        /* --- SAYFA GEÇİŞ ANİMASYONU --- */
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- ANİMASYONLAR --- */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* --- TIKLAMA ANİMASYONLARI --- */
+        .nav-links a, .hero-btns a, .system-card, .dept-card, .btn-purple-download, .btn-mta-download, .faq-item, .team-card, .social-btn, .copy-button, .stat-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:active, .hero-btns a:active, .system-card:active, .dept-card:active, .btn-purple-download:active, .btn-mta-download:active, .faq-item:active, .team-card:active, .social-btn:active, .copy-button:active, .stat-card:active {
+            transform: scale(0.95);
+        }
+
+        /* --- 1. KAT: NAVBAR VE HERO --- */
+        nav {
+            position: absolute; top: 0; width: 100%; height: 100px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 8%; z-index: 1000;
+        }
+        .logo-area img { 
+            height: 80px; /* Logo küçültüldü */
+            width: auto; 
+            object-fit: contain;
+            margin-top: 20px; /* Logoyu aşağı kaydıran satır */
+        }
+        
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+        .nav-links a { color: #f0f0f0; text-decoration: none; font-size: 14px; font-weight: 600; }
+        .nav-links a:hover { color: #ef4444; } /* Kırmızı yapıldı */
+        .play-btn { background: #991b1b; padding: 12px 25px; border-radius: 12px; font-weight: bold; color: white !important; }
+
+        .hero {
+            position: relative; height: 100vh; width: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url('arkaplan.png');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; 
+            align-items: flex-start;
+            justify-content: center; 
+            text-align: left;
+            padding-left: 8%;
+        }
+
+        .MaviAy-brand {
+            color: #ef4444; /* Kırmızı yapıldı */
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .hero h1 { 
+            font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 25px; 
+            animation: slideInLeft 1s ease-out forwards;
+        }
+        .hero h1 span { color: #ef4444; } /* Kırmızı yapıldı */
+        
+        .hero-btns { 
+            display: flex; gap: 15px; margin-bottom: 35px; 
+            animation: slideInLeft 1.2s ease-out forwards;
+        }
+        .btn-white { background: white; color: black; padding: 14px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 14px; }
+        .btn-discord { background: #5865F2; color: white; padding: 14px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        
+        .ip-copy-container { 
+            background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 10px 25px; border-radius: 12px; display: inline-flex; align-items: center; gap: 15px;
+            animation: slideInLeft 1.4s ease-out forwards;
+        }
+        .ip-label { color: #64748b; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+        .ip-address { color: white; font-weight: 700; font-size: 14px; }
+        .copy-button { color: #ef4444; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; padding-left: 10px; border-left: 1px solid rgba(255, 255, 255, 0.1); }
+
+        /* --- İSTATİSTİK BÖLÜMÜ --- */
+        .stats-bar {
+            background: #080808; padding: 60px 10%; display: flex;
+            justify-content: space-around; align-items: center;
+            border-top: 1px solid #111; border-bottom: 1px solid #111;
+        }
+        .stat-card { text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+        .stat-card.visible { opacity: 1; transform: translateY(0); }
+        .stat-card h2 { font-size: 2.8rem; font-weight: 800; color: white; margin-bottom: 5px; }
+        .stat-card p { font-size: 12px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+        .stat-card .blue-text { color: #ef4444; }
+
+        /* --- 2. KAT: SİSTEMLER --- */
+        .systems-section { padding: 100px 10%; background-color: #050505; }
+        .tag-purple-small { color: #ef4444; font-size: 10px; font-weight: bold; border: 1px solid #1a1a1a; padding: 5px 12px; border-radius: 8px; display: inline-block; background: #0d0d0d; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .systems-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px; }
+        .system-card { background: rgba(255, 255, 255, 0.02); border: 1px solid #111; padding: 25px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .system-card:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.05); }
+        .sys-content { display: flex; align-items: center; gap: 20px; }
+        .sys-icon { color: #ef4444; font-size: 22px; width: 30px; }
+        .sys-text h3 { font-size: 17px; margin-bottom: 4px; }
+        .sys-text p { color: #555; font-size: 12px; }
+
+        /* --- 3. KAT: DEPARTMANLAR --- */
+        .dept-section { padding: 100px 10%; background-color: #050505; text-align: center; }
+        .dept-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 50px; }
+        .dept-card { background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 100%); border: 1px solid #1a1a1a; border-radius: 20px; padding: 40px 30px; text-align: left; }
+        .dept-card:hover { transform: translateY(-10px); border-color: #ef4444; }
+        .dept-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 20px; }
+        .icon-blue { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .icon-red { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .icon-green { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+        .dept-card h3 { font-size: 22px; margin-bottom: 15px; }
+        .dept-card p { color: #777; font-size: 14px; margin-bottom: 25px; line-height: 1.6; }
+        .dept-list { list-style: none; }
+        .dept-list li { font-size: 13px; color: #555; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+
+        /* --- 4. KAT: NASIL OYNANIR --- */
+        .guide-section { padding: 100px 10%; background: #050505; position: relative; }
+        .guide-container { display: flex; align-items: center; justify-content: space-between; gap: 50px; }
+        .guide-content { flex: 1; }
+        .guide-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 40px; line-height: 1.1; }
+        .guide-title span { color: #ef4444; }
+        .step-list { display: flex; flex-direction: column; gap: 15px; }
+        .step-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 20px 30px; border-radius: 12px; display: flex; align-items: center; gap: 20px; max-width: 480px; transition: 0.3s; }
+        .step-box.active { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.3); }
+        .step-num { background: #151515; width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #444; }
+        .step-box.active .step-num { background: #ef4444; color: white; }
+        .step-text { font-size: 16px; font-weight: 600; color: #555; }
+        .step-box.active .step-text { color: white; }
+        .download-btn-row { display: flex; gap: 15px; margin-top: 40px; }
+        .btn-purple-download { background: #991b1b; color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 10px 20px rgba(153, 27, 27, 0.2); }
+        .btn-mta-download { background: rgba(255,255,255,0.05); color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none; font-weight: 700; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
+        .guide-image { flex: 1; position: relative; display: flex; justify-content: center; }
+        .guide-image img { max-width: 110%; height: auto; z-index: 1; filter: drop-shadow(0 0 30px rgba(239, 68, 68, 0.2)); }
+        .purple-glow-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 450px; height: 450px; border: 20px solid rgba(239, 68, 68, 0.05); border-radius: 50%; z-index: 0; }
+
+        /* --- 5. KAT: SSS --- */
+        .faq-section { padding: 100px 10%; background-color: #050505; text-align: center; }
+        .faq-container { max-width: 800px; margin: 50px auto 0; }
+        .faq-item { background: rgba(255, 255, 255, 0.03); border: 1px solid #1a1a1a; border-radius: 15px; margin-bottom: 15px; overflow: hidden; }
+        .faq-header { padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .faq-header h3 { font-size: 16px; font-weight: 600; color: #eee; }
+        .faq-header i { color: #ef4444; font-size: 14px; transition: 0.3s; }
+        .faq-answer { padding: 0 30px; max-height: 0; overflow: hidden; transition: 0.3s ease-out; text-align: left; color: #777; font-size: 14px; line-height: 1.6; }
+        .faq-item.active { border-color: #ef4444; background: rgba(239, 68, 68, 0.02); }
+        .faq-item.active .faq-answer { padding-bottom: 25px; max-height: 300px; }
+        .faq-item.active .faq-header i { transform: rotate(180deg); }
+
+        /* --- 6. KAT: EKİP --- */
+        .team-section { padding: 100px 10%; background-color: #050505; text-align: center; }
+        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 50px; }
+        .team-card { background: rgba(255, 255, 255, 0.02); border: 1px solid #1a1a1a; padding: 40px 20px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; }
+        .team-card:hover { border-color: #ef4444; transform: translateY(-5px); }
+        .team-img-wrapper { width: 100px; height: 100px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #ef4444, transparent); margin-bottom: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .team-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #050505; }
+        .team-card h3 { font-size: 18px; margin-bottom: 5px; color: white; }
+        .team-card p { font-size: 12px; color: #ef4444; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- 7. KAT: JANTİ FOOTER --- */
+        footer { 
+            background-color: #020202; 
+            padding: 100px 10% 50px; 
+            border-top: 1px solid #111; 
+            text-align: center;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        .footer-logo-main {
+            width: 120px; /* Footer logosu da küçültüldü */
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .footer-nav {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        .footer-nav a {
+            color: #777;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+        .footer-nav a:hover { color: #ef4444; }
+        
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-socials a {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #111;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .footer-socials a:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
+        }
+        .footer-bottom-text {
+            margin-top: 40px;
+            color: #444;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1100px) { 
+            .hero { align-items: center; text-align: center; padding-left: 0; }
+            .team-grid { grid-template-columns: 1fr; } 
+            .guide-container { flex-direction: column; text-align: center; } 
+            .guide-image { display: none; } 
+            .step-box { margin: 0 auto; } 
+            .download-btn-row { justify-content: center; } 
+            .systems-grid { grid-template-columns: 1fr; } 
+            .dept-grid { grid-template-columns: 1fr; } 
+            .stats-bar { flex-direction: column; gap: 40px; } 
+            nav { height: auto; flex-direction: column; padding: 20px; }
+            .logo-area img { height: 60px; margin-top: 0; }
+            .footer-nav { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-area"><img src="logo.png" alt="Vice Logo"></div>
+        <div class="nav-links">
+            <a href="#">Ana Sayfa</a> <a href="hakkimizda.html">Hakkımızda</a> <a href="aktif.html">Aktif Oyuncular</a> <a href="kurallar.html">Kurallar</a> <a href="https://www.shopier.com/vicemta">Market</a>
+            <a href="https://multitheftauto.com/" class="play-btn">HEMEN İNDİR</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="MaviAy-brand">Vice Roleplay</div>
+        
+        <h1>Türkiye'nin <span>En Kaliteli</span><br>MTA Roleplay Deneyimi</h1>
+        
+        <div class="hero-btns">
+            <a href="mtasa://31.221.77.50:22003" class="btn-white">Hemen Başla</a>
+            <a href="https://discord.com/invite/viceroleplay" target="_blank" class="btn-discord"><i class="fab fa-discord"></i> Discord</a>
+        </div>
+        
+        <div class="ip-copy-container">
+            <div class="ip-label">SUNUCU IP:</div>
+            <div class="ip-address" id="ip">YAKINDA...</div>
+            <div class="copy-button" onclick="copyIP()">KOPYALA</div>
+        </div>
+    </div>
+
+    <div class="stats-bar" id="stats-section">
+        <div class="stat-card">
+            <h2 class="counter" data-target="2500">0</h2>
+            <p>Discord Üyesi</p>
+        </div>
+        <div class="stat-card">
+            <h2 class="counter" data-target="50">0</h2>
+            <p>Meslek</p>
+        </div>
+        <div class="stat-card">
+            <h2 class="counter" data-target="500">0</h2>
+            <p>Araç</p>
+        </div>
+        <div class="stat-card">
+            <h2 class="counter blue-text" data-target="99.9" data-is-decimal="true">0</h2>
+            <p>Uptime</p>
+        </div>
+    </div>
+
+    <section class="systems-section">
+        <div class="tag-purple-small">SİSTEMLER</div>
+        <h2 style="font-size: 2.5rem; font-weight: 800;">Sunduklarımız</h2>
+        <div class="systems-grid">
+            <div class="system-card"><div class="sys-content"><div class="sys-icon"><i class="fas fa-wallet"></i></div><div class="sys-text"><h3>Dinamik Ekonomi</h3><p>Oyuncu tarafından yönetilen piyasa.</p></div></div><div class="sys-arrow">❯</div></div>
+            <div class="system-card"><div class="sys-content"><div class="sys-icon"><i class="fas fa-car"></i></div><div class="sys-text"><h3>Araç Sistemi</h3><p>500+ özel araç ve modifiye.</p></div></div><div class="sys-arrow">❯</div></div>
+            <div class="system-card"><div class="sys-content"><div class="sys-icon"><i class="fas fa-home"></i></div><div class="sys-text"><h3>Emlak Sistemi</h3><p>Ev ve dükkan yatırım fırsatları.</p></div></div><div class="sys-arrow">❯</div></div>
+            <div class="system-card"><div class="sys-content"><div class="sys-icon"><i class="fas fa-gavel"></i></div><div class="sys-text"><h3>Adalet Sistemi</h3><p>Gerçekçi mahkeme ve hukuk sistemi.</p></div></div><div class="sys-arrow">❯</div></div>
+        </div>
+    </section>
+
+    <section class="dept-section">
+        <div class="tag-purple-small">DEPARTMANLAR</div>
+        <h2 style="font-size: 2.5rem; font-weight: 800;">Hangi Tarafta Olacaksın?</h2>
+        <div class="dept-grid">
+            <div class="dept-card"><div class="dept-icon icon-blue"><i class="fas fa-shield-alt"></i></div><h3>Polis Departmanı</h3><p>Şehrin güvenliğini sağla.</p><ul class="dept-list"><li>LSPD & BCSO</li></ul></div>
+            <div class="dept-card"><div class="dept-icon icon-red"><i class="fas fa-exclamation-triangle"></i></div><h3>Suç Dünyası</h3><p>Risk yüksek, kazanç büyük.</p><ul class="dept-list"><li>Çeteler & Soygunlar</li></ul></div>
+            <div class="dept-card"><div class="dept-icon icon-green"><i class="fas fa-building"></i></div><h3>Sivil Hayat</h3><p>Kendi kariyerini inşa et.</p><ul class="dept-list"><li>50+ Meslek</li></ul></div>
+        </div>
+    </section>
+
+    <section class="guide-section" id="nasil-oynanir">
+        <div class="guide-container">
+            <div class="guide-content">
+                <div class="tag-purple-small" style="margin-bottom: 10px;">REHBER</div>
+                <h2 class="guide-title">NASIL<br><span>OYNANIR?</span></h2>
+                <div class="step-list">
+                    <div class="step-box active"><div class="step-num">1</div><div class="step-text">Oyunu İndir</div></div>
+                    <div class="step-box"><div class="step-num">2</div><div class="step-text">Kayıt Ol</div></div>
+                    <div class="step-box"><div class="step-num">3</div><div class="step-text">Karakterini Oluştur</div></div>
+                    <div class="step-box"><div class="step-num">4</div><div class="step-text">Oynamaya Başla</div></div>
+                </div>
+                <div class="download-btn-row">
+                    <a href="https://drive.google.com/drive/folders/1mMlbLvtuEKZn-aBZ7Qq8FdB3NIipelHg" class="btn-purple-download" target="_blank"><i class="fas fa-download"></i> GTA San Andreas İndir</a>
+                    <a href="https://multitheftauto.com/" class="btn-mta-download" target="_blank">MTA:SA İndir <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+            <div class="guide-image">
+                <img src="karakterler.png" alt="">
+                <div class="purple-glow-circle"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <div class="tag-purple-small">SSS</div>
+        <h2 style="font-size: 2.5rem; font-weight: 800;">Sık Sorulan Sorular</h2>
+        <div class="faq-container">
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header"><h3>Bu Sunucu Nedir?</h3><i class="fas fa-chevron-down"></i></div><div class="faq-answer">Eşi benzeri olmayan MTA: San Andreas projesi, oyuncuların en iyi kalitede oyun deneyimi yaşamaları için tasarlanmıştır.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header"><h3>Sunucuya nasıl bağlanırım?</h3><i class="fas fa-chevron-down"></i></div><div class="faq-answer">MTA içerisinden F8 tuşuna basarak "connect 37.221.77.50" yazıp giriş yapabilirsiniz.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header"><h3>RP (ROLEPLAY) Ne Anlama Geliyor?</h3><i class="fas fa-chevron-down"></i></div><div class="faq-answer">RolePlay, oyuncuların karakterler ve senaryolar yarattığı ve ardından oyun içindeki rollerine göre hareket ettiği bir oyun modudur.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header"><h3>Oyunu Nasıl İndirebilirim?</h3><i class="fas fa-chevron-down"></i></div><div class="faq-answer">Öncelikle GTA: San Andreas indirmeniz ve ardından MTA: San Andreas'ı yüklemeniz gerekir.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header"><h3>Sunucuda Ne Yapmalıyım?</h3><i class="fas fa-chevron-down"></i></div><div class="faq-answer">Çok çeşitli iş ve oyuncu etkileşimlerine ek olarak, düzenli güncellemelerimiz ve sezonluk etkinliklerimiz mevcuttur.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header"><h3>Sunucuda Nasıl Para Kazanabilirim?</h3><i class="fas fa-chevron-down"></i></div><div class="faq-answer">Sunucuda para kazanmanın many yolu vardır. İşlerde çalışabilir, soygunlar yapabilir, ticaret yapabilir ve daha fazlasını yapabilirsiniz.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header"><h3>Nasıl Yardım Alabilirim?</h3><i class="fas fa-chevron-down"></i></div><div class="faq-answer">Herhangi bir sorunuz veya sorunuz varsa, Discord sunucumuzda destek alabilir veya destek talebi oluşturabilirsiniz.</div></div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="tag-purple-small">EKİP</div>
+        <h2 style="font-size: 2.5rem; font-weight: 800;">Yönetim Kadrosu</h2>
+        <div class="team-grid">
+            <div class="team-card"><div class="team-img-wrapper"><img src="noir.png"></div><h3>NoirDante</h3><p>Founder</p></div>
+            <div class="team-card"><div class="team-img-wrapper"><img src="cruaserad.jpeg"></div><h3>EternalX</h3><p>Founder</p></div>
+			<div class="team-card"><div class="team-img-wrapper"><img src="nailes.png"></div><h3>Nailes</h3><p>Founder</p></div>
+			<div class="team-card"><div class="team-img-wrapper"><img src="luax.png"></div><h3>Luax</h3><p>Founder</p></div>
+			<div class="team-card"><div class="team-img-wrapper"><img src="waxellzetass.png"></div><h3>Waxellzetass</h3><p>Co:Founder</p></div>
+			<div class="team-card"><div class="team-img-wrapper"><img src="elegy.png"></div><h3>Elegy_86</h3><p>Co:Founder</p></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <img src="logo.png" alt="Vice Logo" class="footer-logo-main">
+            
+            <ul class="footer-nav">
+                <li><a href="#">ANA SAYFA</a></li>
+                <li><a href="hakkimizda.html">HAKKIMIZDA</a></li>
+				<li><a href="aktif.html">AKTİF OYUNCULAR</a></li>
+                <li><a href="#">KURALLAR</a></li>
+                <li><a href="https://www.shopier.com/vicemta">MARKET</a></li>
+            </ul>
+
+            <div class="footer-socials">
+                <a href="https://discord.com/invite/viceroleplay" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://www.instagram.com/viceroleplay/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@viceroleplay" target="_blank"><i class="fab fa-youtube"></i></a>
+            </div>
+
+            <p class="footer-bottom-text">2026 © Vice Roleplay. TÜM HAKLARI SAKLIDIR.</p>
+        </div>
+    </footer>
+
+    <script>
+        function copyIP() { 
+            const ipText = document.getElementById("ip").innerText;
+            navigator.clipboard.writeText(ipText); 
+            alert("Sunucu IP Kopyalandı: " + ipText); 
+        }
+        function toggleFaq(element) { element.classList.toggle('active'); }
+
+        const statsSection = document.getElementById('stats-section');
+        const statCards = document.querySelectorAll('.stat-card');
+        const counters = document.querySelectorAll('.counter');
+        let animated = false;
+
+        const animateStats = () => {
+            statCards.forEach((card, index) => {
+                setTimeout(() => { card.classList.add('visible'); }, index * 200);
+            });
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const isDecimal = counter.getAttribute('data-is-decimal') === 'true';
+                const speed = 150; 
+                const updateCount = () => {
+                    const count = +counter.innerText.replace('%', '').replace('+', '');
+                    const inc = target / speed;
+                    if (count < target) {
+                        let nextVal = count + inc;
+                        counter.innerText = isDecimal ? nextVal.toFixed(1) + '%' : Math.ceil(nextVal).toLocaleString() + '+';
+                        setTimeout(updateCount, 10);
+                    } else {
+                        counter.innerText = isDecimal ? target + '%' : target.toLocaleString() + '+';
+                    }
+                };
+                updateCount();
+            });
+        };
+
+        window.addEventListener('scroll', () => {
+            const sectionPos = statsSection.getBoundingClientRect().top;
+            if (sectionPos < window.innerHeight / 1.2 && !animated) {
+                animateStats(); animated = true;
+            }
+        });
+
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                if (href && href.startsWith('mtasa://')) {
+                    return; 
+                }
+
+                if (href && href !== '#' && !href.startsWith('#')) {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    document.body.style.transition = 'opacity 0.5s ease-out';
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
